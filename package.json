@@ -1,0 +1,28 @@
+{
+  "name": "countryball-war",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Territory-capture real-time strategy for the browser. No ads, no in-app purchases.",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "npm run dev -w @cbw/client",
+    "build": "npm run build -w @cbw/core && npm run build -w @cbw/client",
+    "typecheck": "tsc -b --force",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "sim": "npm run sim -w @cbw/core",
+    "preview": "npm run preview -w @cbw/client"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "vite": "7.1.5",
+    "vitest": "3.2.4"
+  }
+}
