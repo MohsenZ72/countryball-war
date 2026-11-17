@@ -3,7 +3,7 @@
 ## Done
 
 - **Simulation.** Deterministic 30 Hz step, production, movement, combat,
-  upgrades, warheads, elimination, territory-count tiebreak. 55 tests.
+  upgrades, warheads, elimination, territory-count tiebreak. 57 tests.
 - **Bots.** Four skill profiles with a measured, strictly-ordered ladder;
   survive / strike / invest / escalate / commit priority; garrison pooling
   across territories whose columns land together.

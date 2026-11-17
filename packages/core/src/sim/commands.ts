@@ -32,6 +32,19 @@ export function sendableFrom(troops: number, ratio: number, balance: Balance = B
   return Math.max(0, Math.min(wanted, allowed));
 }
 
+/**
+ * A multi-source send is ONE assault, not several.
+ *
+ * Every column in the order is given the slowest column's travel time, so they
+ * all land on the same step. Without this, pooling was a trap: a player who
+ * followed the game's own advice and tapped six territories watched six
+ * columns trickle into a fort one at a time and get cut down individually,
+ * with nothing on screen explaining why. The rule the game teaches has to be
+ * the rule the game runs.
+ *
+ * The closer columns are visibly slower, travelling as a group, which also
+ * reads correctly: an army moves at the pace of its slowest part.
+ */
 function applySend(
   world: World,
   command: Extract<Command, { kind: 'send' }>,
@@ -47,31 +60,40 @@ function applySend(
     return;
   }
 
-  let launched = 0;
-  for (const fromId of command.from) {
+  // Gather first so the slowest march can set the pace for the whole assault.
+  const unique = [...new Set(command.from)];
+  const parts: { from: number; count: number; duration: number }[] = [];
+  for (const fromId of unique) {
     if (fromId === command.to) continue;
     const source = world.nodes[fromId];
     if (!source || source.owner !== command.faction) continue;
     const count = sendableFrom(source.troops, command.ratio, balance);
     if (count < 1) continue;
+    parts.push({ from: fromId, count, duration: marchDuration(dist(source.pos, target.pos), balance) });
+  }
 
-    source.troops -= count;
-    const duration = marchDuration(dist(source.pos, target.pos), balance);
+  if (parts.length === 0) {
+    reject(world, 'no garrison could spare troops');
+    return;
+  }
+
+  const duration = Math.max(...parts.map((p) => p.duration));
+  for (const part of parts) {
+    const source = world.nodes[part.from];
+    if (!source) continue;
+    source.troops -= part.count;
     const army: Army = {
       id: world.nextEntityId++,
       owner: command.faction,
-      from: fromId,
+      from: part.from,
       to: command.to,
-      count,
+      count: part.count,
       progress: 0,
       duration,
     };
     world.armies.push(army);
     world.events.push({ kind: 'launched', army: army.id, owner: command.faction, at: world.time });
-    launched++;
   }
-
-  if (launched === 0) reject(world, 'no garrison could spare troops');
 }
 
 export function marchDuration(distance: number, balance: Balance = BALANCE): number {

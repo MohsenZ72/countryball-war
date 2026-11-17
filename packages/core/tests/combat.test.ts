@@ -91,6 +91,45 @@ describe('send sizing', () => {
     expect(sendableFrom(0, 1)).toBe(0);
   });
 
+  it('lands every column of a pooled assault on the same step', () => {
+    const world = tinyWorld();
+    const sources = world.nodes.filter((n) => n.id !== 0).slice(0, 3);
+    for (const node of sources) {
+      node.owner = 0;
+      node.troops = 20;
+    }
+    const target = world.nodes[0];
+    if (!target) throw new Error('empty map');
+    target.owner = 1;
+    target.troops = 25;
+
+    run(world, 0.05, [
+      { kind: 'send', faction: 0, from: sources.map((n) => n.id), to: target.id, ratio: 1 },
+    ]);
+    expect(world.armies.length).toBe(3);
+    const durations = new Set(world.armies.map((a) => a.duration));
+    expect(durations.size).toBe(1);
+
+    // They must take it together; arriving one at a time, each would be cut
+    // down by the garrison on its own.
+    const total = world.armies.reduce((sum, a) => sum + a.count, 0);
+    expect(total).toBeGreaterThan(25);
+    run(world, (world.armies[0]?.duration ?? 0) + 0.2);
+    expect(world.armies.length).toBe(0);
+    expect(target.owner).toBe(0);
+  });
+
+  it('ignores a repeated source in one order', () => {
+    const world = tinyWorld();
+    const source = ownedBy(world, 0);
+    source.troops = 20;
+    const target = neutral(world);
+    run(world, 0.05, [
+      { kind: 'send', faction: 0, from: [source.id, source.id, source.id], to: target.id, ratio: 0.5 },
+    ]);
+    expect(world.armies.length).toBe(1);
+  });
+
   it('moves troops out of the source the moment the order is given', () => {
     const world = tinyWorld();
     const source = ownedBy(world, 0);

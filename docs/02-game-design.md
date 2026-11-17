@@ -57,6 +57,12 @@ careless opponent's seat is still a real strategy.
 
 - A column carries `floor(garrison x ratio)` troops and always leaves at least
   1 behind. The player picks the ratio: 25%, 50% or 100%.
+- **A multi-source order is one assault.** Every column in it is given the
+  slowest column's travel time, so they all land together. Without this,
+  pooling was a trap: a player who followed the game's own advice and tapped
+  six territories watched six columns trickle into a fort one at a time and
+  get cut down individually, with nothing explaining why. Found by playing,
+  not by reading.
 - Marching speed is 190 map units/s, clamped to between 0.7 s and 4.5 s. The
   clamp is a feel decision: at the original 150 units/s a cross-map move took
   six seconds and the opening of a match felt dead.

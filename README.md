@@ -8,7 +8,7 @@ hold it, and out-think up to five rival commanders.
 ```bash
 npm install
 npm run dev      # play at http://localhost:5178
-npm test         # 55 tests
+npm test         # 57 tests
 npm run sim      # bot-vs-bot balance harness
 npm run build    # production bundle (~48 kB JS, ~17 kB gzipped)
 ```
@@ -23,15 +23,16 @@ warheads, and a struck territory is left empty for whoever walks in first.
 Three ideas carry the whole game:
 
 - **A full garrison produces nothing.** Sitting still is a loss of tempo.
-- **Pooling beats stacking.** Tap several territories, then the target: their
-  columns arrive together and take what one garrison never could.
+- **Pooling beats stacking.** Tap several territories, then the target: every
+  column in one order lands at the same moment and takes what a single
+  garrison never could.
 - **Neutral ground never fights back.** It also never grows. Taking it early is
   the cheapest territory you will ever own.
 
 ## Layout
 
 ```
-packages/core     the simulation: deterministic, DOM-free, 55 tests
+packages/core     the simulation: deterministic, DOM-free, 57 tests
   src/config.ts     every balance number in the game
   src/sim/          world step, combat, command validation
   src/ai/bot.ts     the bot commander

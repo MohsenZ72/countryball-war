@@ -38,7 +38,14 @@ export function createBotState(faction: FactionId, balance: Balance = BALANCE): 
   return { nextThinkAt: faction * balance.dt * 7 };
 }
 
-/** Pooled columns must land inside this window to count as one assault. */
+/**
+ * How much slower than its fastest column an assault may be.
+ *
+ * Columns in one order now all arrive together (see `applySend`), so pooling a
+ * distant garrison no longer loses the fight — it just slows the whole assault
+ * to that garrison's pace. The window keeps a bot from waiting on a territory
+ * on the far side of the map for a marginal gain in weight.
+ */
 const ASSAULT_WINDOW = 1.1;
 /** An enemy this many seconds away counts as "on the border". */
 const BORDER_MARCH = 4;

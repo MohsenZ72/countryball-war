@@ -6,7 +6,7 @@ short version and the list of things that have already gone wrong here.
 ## Shape
 
 ```
-packages/core   the rules. Deterministic, DOM-free, 55 tests.
+packages/core   the rules. Deterministic, DOM-free, 57 tests.
 apps/client     the game. Canvas board, DOM HUD, no framework.
 docs/           design, system design, design system, patterns, ADRs, runbook.
 .claude/skills/ cbw-balance, cbw-simulation, cbw-client.
@@ -30,7 +30,7 @@ Load the skill that matches the work:
 ```bash
 npm install
 npm run dev        # http://localhost:5178
-npm test           # 55 tests, ~1.5s
+npm test           # 57 tests, ~1.5s
 npm run sim        # bot-vs-bot balance harness
 npm run typecheck
 npm run build

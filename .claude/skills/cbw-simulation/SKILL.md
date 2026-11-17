@@ -63,7 +63,7 @@ assaults arithmetic says they cannot win.
 ## Testing
 
 ```bash
-npm test               # 55 tests, ~1.5s
+npm test               # 57 tests, ~1.5s
 npm run test:watch
 npm run sim            # headless bot-vs-bot
 ```
